@@ -21,11 +21,6 @@ page = st.sidebar.radio(
 if page == "🔍 Analyse Reddit":
 
     # --- CSS (facultatif : déplace-le dans un helper si tu veux) ---
-    css_file = os.path.join("templates", "styles.css")
-    if os.path.exists(css_file):
-        with open(css_file) as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
     # --- UI Reddit ----------------------------------------------------
     st.title("🔍 Reddit Comment Analyzer")
     st.header("Analyse de Sentiments des Commentaires Reddit")

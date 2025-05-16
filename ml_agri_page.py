@@ -24,6 +24,26 @@ def show_ml_page():
         df = pd.read_csv(uploaded_file)
         local_counts = df["sentiment"].value_counts().to_dict()
         local_counts = {k.lower(): local_counts.get(k, 0) for k in ["positive", "negative", "neutral"]}
+        # Lecture du fichier
+        # ✅ Mapping FR → EN pour comparaison
+        label_map = {
+            "positif": "positive",
+            "négatif": "negative", "negatif": "negative",
+            "neutre": "neutral"
+        }
+        df["sentiment_norm"] = (
+            df["sentiment"]
+            .astype(str)
+            .str.strip()
+            .str.lower()
+            .map(label_map)
+            .fillna("neutral")  # fallback
+        )
+
+        # Enregistrer les totaux dans session_state
+        local_counts = df["sentiment_norm"].value_counts().reindex(
+            ["positive", "negative", "neutral"], fill_value=0
+        ).to_dict()
         st.session_state["local_counts"] = local_counts
 
         st.subheader("🔍 Aperçu des données")

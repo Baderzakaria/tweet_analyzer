@@ -16,16 +16,33 @@ def show_compare_page():
         )
         return
 
+    # ➕ Total pour calcul de pourcentage
+    total_reddit = sum(reddit.values())
+    total_local  = sum(local.values())
+
     data = pd.DataFrame({
         "Sentiment": ["Positif", "Négatif", "Neutre"],
-        "Reddit":    [reddit["positive"], reddit["negative"], reddit["neutral"]],
-        "Avis locaux": [local["positive"], local["negative"], local["neutral"]],
+        "Reddit (%)": [
+            round(100 * reddit["positive"] / total_reddit, 1),
+            round(100 * reddit["negative"] / total_reddit, 1),
+            round(100 * reddit["neutral"]  / total_reddit, 1)
+        ],
+        "Avis locaux (%)": [
+            round(100 * local["positive"] / total_local, 1),
+            round(100 * local["negative"] / total_local, 1),
+            round(100 * local["neutral"]  / total_local, 1)
+        ]
     })
 
+    # ➕ Tableau lisible
+    st.subheader("📋 Répartition en pourcentage")
+    st.dataframe(data.set_index("Sentiment"))
+
+    # ➕ Graphique groupé
     fig = px.bar(
-        data.melt(id_vars="Sentiment", var_name="Source", value_name="Nombre"),
-        x="Sentiment", y="Nombre", color="Source", barmode="group", text_auto=True,
-        title="Répartition des sentiments"
+        data.melt(id_vars="Sentiment", var_name="Source", value_name="Pourcentage"),
+        x="Sentiment", y="Pourcentage", color="Source", barmode="group", text_auto=True,
+        title="Distribution des sentiments (en %)"
     )
     st.plotly_chart(fig, use_container_width=True)
 
