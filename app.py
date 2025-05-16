@@ -9,8 +9,11 @@ from reddit_utils import get_reddit_comments
 from ml_agri_page import show_ml_page     # ta page ML
 
 st.set_page_config(page_title="Sentiment Suite", page_icon="🚀", layout="wide")
-
-page = st.sidebar.radio("Choisis ta vue :", ["🔍 Analyse Reddit", "📊 ML Agri"])
+# app.py  ───────────────────────────────────────────────
+page = st.sidebar.radio(
+    "Choisis ta vue :",
+    ["🔍 Analyse Reddit", "📊 ML Agri", "📈 Comparaison"]
+)
 
 # ----------------------------------------------------------------------
 # 1️⃣  PAGE REDDIT  -----------------------------------------------------
@@ -47,6 +50,10 @@ if page == "🔍 Analyse Reddit":
 
         # -- DataFrame ------------------------------------------------
         df = pd.DataFrame(comments)
+        reddit_counts = df["Sentiment"].value_counts().to_dict()
+        reddit_counts = {k.lower(): reddit_counts.get(k, 0) for k in ["positive", "negative", "neutral"]}
+        st.session_state["reddit_counts"] = reddit_counts
+
         st.dataframe(df)
 
         # -- Pie chart Sentiments -------------------------------------
@@ -86,3 +93,6 @@ if page == "🔍 Analyse Reddit":
 # ----------------------------------------------------------------------
 elif page == "📊 ML Agri":
     show_ml_page()
+elif page == "📈 Comparaison":
+    from compare import show_compare_page   # ← voir point 3
+    show_compare_page()

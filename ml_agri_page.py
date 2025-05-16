@@ -22,6 +22,10 @@ def show_ml_page():
 
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
+        local_counts = df["sentiment"].value_counts().to_dict()
+        local_counts = {k.lower(): local_counts.get(k, 0) for k in ["positive", "negative", "neutral"]}
+        st.session_state["local_counts"] = local_counts
+
         st.subheader("🔍 Aperçu des données")
         st.write(df.head())
 
