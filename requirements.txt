@@ -1,0 +1,17 @@
+streamlit
+praw
+textblob
+boto3
+matplotlib
+seaborn
+pandas
+plotly
+python-dotenv
+langdetect
+translate
+transformers
+torch
+deep-translator
+wordcloud
+nltk
+scikit-learn
